@@ -5,7 +5,11 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, roc_auc_score, accuracy_score
 
 
-def calculate_results(yy_true, yy_pred, y_test, y_pred):
+def calculate_results(x, y , model):
+    y_pred  = model.predict(x)
+    yy_true = (y > .5).flatten()
+    yy_pred = (y_pred > .5).flatten()
+    
     report = classification_report(yy_true, yy_pred, output_dict = True)
 
     Accuracy = accuracy_score(yy_true, yy_pred)
@@ -15,7 +19,7 @@ def calculate_results(yy_true, yy_pred, y_test, y_pred):
     Sensitivity = Recall
     Sensificity = report['False']['recall']
 
-    AUC = roc_auc_score(y_test.flatten(), y_pred.flatten())
+    AUC = roc_auc_score(y.flatten(), y_pred.flatten())
     IOU = (Precision*Recall)/(Precision+Recall - Precision*Recall)
 
     results = {"Accuracy": Accuracy,
